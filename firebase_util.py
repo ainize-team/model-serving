@@ -25,6 +25,7 @@ def get_model_info():
   return db.reference('distribution').get()
 
 def download_model(model_name, model_version):
+  print(f' Downloading the model...{model_name} ver. {model_version}')
   bucket = storage.bucket()
   if not os.path.exists('./model'):
     os.makedirs('./model')

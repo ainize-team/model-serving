@@ -23,7 +23,6 @@ def main():
 if __name__ == '__main__':
   with open('keys/mlops-crawler-firebase-adminsdk.json', 'r') as f:
     key = json.load(f)
-    print(private_key_id)
     key['private_key_id'] = private_key_id
     key['private_key'] = private_key
     with open('keys/mlops-crawler-firebase-adminsdk.json', 'w', encoding='utf-8') as k:
