@@ -1,0 +1,32 @@
+openapi: 3.0.2
+info:
+  title: Prediction of Emotion
+  description: You can judge the emotion with text. 
+  version: 1.0.0
+servers:
+  - url: https://master-model-serving-ainize-team.endpoint.ainize.ai
+paths:
+  /predict:
+    post:
+      summary: Get prediction of emotion through the text.
+      requestBody:
+        description: sequence is the text you want to predict emotion.
+        content:
+          application/json:
+            schema: 
+              type: object
+              properties:
+                  sequence:
+                    type: string
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema: {}
