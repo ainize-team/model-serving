@@ -1,5 +1,4 @@
 from flask import Flask, request, jsonify
-import requests
 import json
 import os
 from firebase_util import init_firebase, init_model
