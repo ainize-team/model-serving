@@ -23,27 +23,34 @@ app = Flask(__name__)
 
 @app.route("/predict", methods=["POST"])
 def main():
-    global model, tokenizer
     data = request.get_json()
     sequence = data["sequence"]
     if (
         model_state["previousModelName"] != model_state["currentModelName"]
         or model_state["previousModelVersion"] != model_state["currentModelVersion"]
     ):
+        print("Load new model")
         if "model" in current:
             del current["model"]
             del current["tokenizer"]
         current["model"], current["tokenizer"] = load_model("./model")
-    try:
-        result = predict(current["model"], current["tokenizer"], sequence)
-        print(result)
-        return jsonify(result)
-    except OSError as e:
+        model_state["previousModelName"] = model_state["currentModelName"]
+        model_state["previousModelVersion"] = model_state["currentModelVersion"]
+    if "model" in current:
+        try:
+            result = predict(current["model"], current["tokenizer"], sequence)
+            print(result)
+            return jsonify(result)
+        except OSError as e:
+            return jsonify(
+                {"error": "The model is being downloaded or updated. Please wait."}
+            )
+        except Exception as e:
+            return jsonify({"error": f"Unknown Error : {e}"})
+    else:
         return jsonify(
             {"error": "The model is being downloaded or updated. Please wait."}
         )
-    except Exception as e:
-        return jsonify({"error": f"Unknown Error : {e}"})
 
 
 if __name__ == "__main__":

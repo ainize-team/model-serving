@@ -43,7 +43,5 @@ def download_model(model_name, model_version):
 def listener(event):
     model_info = get_model_info()
     download_model(model_info["modelName"], model_info["modelVersion"])
-    model_state["previousModelName"] = model_state["currentModelName"]
-    model_state["previousModelVersion"] = model_state["currentModelVersion"]
     model_state["currentModelName"] = model_info["modelName"]
     model_state["currentModelVersion"] = model_info["modelVersion"]
