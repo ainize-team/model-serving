@@ -15,8 +15,7 @@ def load_model(
     model_path: str,
 ) -> Tuple[AutoModelForSequenceClassification, PreTrainedTokenizerFast]:
     model = (
-        AutoModelForSequenceClassification.from_pretrained(
-            model_path).to(device).eval()
+        AutoModelForSequenceClassification.from_pretrained(model_path).to(device).eval()
     )
     tokenizer = PreTrainedTokenizerFast.from_pretrained(model_path)
     return model, tokenizer
