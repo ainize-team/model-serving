@@ -37,8 +37,9 @@ def predict(
     sequence: str,
 ) -> Dict:
     input_vector = tokenizer.encode(sequence, return_tensors="pt").to(device)
-    logit = softmax(model(input_ids=input_vector).logits)
+    logit = model(input_ids=input_vector).logits
     pred = logit.argmax(dim=-1).tolist()
+    logit = softmax(logit.cpu().numpy())
     if pred[0] == 1:
         return {"label": "positive", "score": logit[0][1].item()}
     else:

@@ -16,6 +16,7 @@ token_uri = os.environ["TOKEN_URI"]
 auth_provider = os.environ["AUTH_PROVIDER"]
 client = os.environ["CLIENT"]
 
+current = {}
 model = None
 tokenizer = None
 
@@ -31,13 +32,20 @@ def main():
         model_state["previousModelName"] != model_state["currentModelName"]
         or model_state["previousModelVersion"] != model_state["currentModelVersion"]
     ):
-        model, tokenizer = load_model("/workspace/model")
+        if "model" in current:
+            del current["model"]
+            del current["tokenizer"]
+        current["model"], current["tokenizer"] = load_model("./model")
     try:
-        result = predict(model, tokenizer, sequence)
+        result = predict(current["model"], current["tokenizer"], sequence)
         print(result)
         return jsonify(result)
+    except OSError as e:
+        return jsonify(
+            {"error": "The model is being downloaded or updated. Please wait."}
+        )
     except Exception as e:
-        print(e)
+        return jsonify({"error": f"Unknown Error : {e}"})
 
 
 if __name__ == "__main__":
