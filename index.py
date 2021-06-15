@@ -3,6 +3,7 @@ import json
 import os
 from firebase_util import init_firebase, init_model
 from util import *
+from model_state import model_state
 
 private_key_id = os.environ["PRIVATE_KEY_ID"]
 private_key = os.environ["PRIVATE_KEY"]
@@ -15,15 +16,23 @@ token_uri = os.environ["TOKEN_URI"]
 auth_provider = os.environ["AUTH_PROVIDER"]
 client = os.environ["CLIENT"]
 
+model = None
+tokenizer = None
+
 app = Flask(__name__)
 
 
 @app.route("/predict", methods=["POST"])
 def main():
+    global model, tokenizer
     data = request.get_json()
     sequence = data["sequence"]
-    try:
+    if (
+        model_state["previousModelName"] != model_state["currentModelName"]
+        or model_state["previousModelVersion"] != model_state["currentModelVersion"]
+    ):
         model, tokenizer = load_model("/workspace/model")
+    try:
         result = predict(model, tokenizer, sequence)
         print(result)
         return jsonify(result)
