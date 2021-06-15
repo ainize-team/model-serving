@@ -17,8 +17,6 @@ auth_provider = os.environ["AUTH_PROVIDER"]
 client = os.environ["CLIENT"]
 
 current = {}
-model = None
-tokenizer = None
 
 app = Flask(__name__)
 
