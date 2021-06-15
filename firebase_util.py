@@ -2,6 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, db, storage
 import os
 import json
+from model_state import model_state
 
 MODEL_FILE_LIST = [
     "tokenizer.json",
@@ -42,3 +43,7 @@ def download_model(model_name, model_version):
 def listener(event):
     model_info = get_model_info()
     download_model(model_info["modelName"], model_info["modelVersion"])
+    model_state["previousModelName"] = model_state["currentModelName"]
+    model_state["previousModelVersion"] = model_state["currentModelVersion"]
+    model_state["currentModelName"] = model_info["modelName"]
+    model_state["currentModelVersion"] = model_info["modelVersion"]
